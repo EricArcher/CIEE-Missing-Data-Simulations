@@ -1,11 +1,6 @@
----
-title: "Simulated Data Summary, version 1"
-author: "Eric Archer"
-date: "12/4/2016"
-output:
-  html_document: default
-  pdf_document: default
----
+# Simulated Data Summary, version 3
+12/12/2016
+
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(comment = "")
 ```
