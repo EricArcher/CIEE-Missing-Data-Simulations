@@ -9,15 +9,11 @@ The data was generated with a combination of a fastsimcoal simulation followed b
 
 ## Scenario parameters
 
-The simulated scenarios are derived from combinations of the following parameter values:
+The scenarios are defined as follows:
 
 ```{r, echo=TRUE}
-num.pops <- 5
-num.loci <- 1000
-div.time <- 100000
-Ne <- c(50, 500)
-Nm <- c(0, 1, 5)
-theta <- c(0.1, 0.25)
+load("v3.params.rdata")
+params[, 1:10]
 ```
 
 These produce the following data.frame of scenario parameters:
