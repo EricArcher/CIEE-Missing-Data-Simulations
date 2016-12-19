@@ -2,21 +2,22 @@ rm(list = ls())
 library(rmetasim)
 library(strataG)
 source("rms funcs.R")
-load("v3.params.rdata")
 
+load("v4.params.rdata")
 num.gens <- 5
 
 label <- attr(params, "label")
 folder <- paste0(label, ".sim.data")
-fnames <- dir(folder, pattern = ".fsc.", full.names = TRUE)
 
-for(f in fnames) {
+# run rmetasim for 'num.gens' generations using fastsimcoal runs as initialization
+for(f in dir(folder, pattern = ".fsc.", full.names = TRUE)) {
   load(f)
   cat(f, "\n")
-  sc <- attr(sim.list, "params")
+  sc <- as.list(attr(fsc.list, "params"))
+  sc$mig.mat <- sc$mig.mat[[1]]
 
-  rms.list <- lapply(1:length(sim.list), function(i) {
-    af <- alleleFreqs(sim.list[[i]], by.strata = T)
+  rms.list <- lapply(1:length(fsc.list), function(i) {
+    af <- alleleFreqs(fsc.list[[i]], by.strata = T)
     rl <- loadLandscape(sc, af, num.gens)
     for(g in 1:num.gens) {
       rl <- landscape.simulate(rl, 1)
@@ -24,16 +25,16 @@ for(f in fnames) {
     }
     landscape2gtypes(rl)
   })
-
   attr(rms.list, "params") <- sc
-  f <- paste(label, sc$mig.type, "rms", sc$scenario, "rdata", sep = ".")
-  save(sim.list, rms.list, file = file.path(folder, f))
+
+  # save both fastsimcoal and rmetasim results to same workspace file
+  rms.f <- paste(label, "rms", sc$scenario, "rdata", sep = ".")
+  save(fsc.list, rms.list, file = file.path(folder, rms.f))
 }
 
 
-fnames <- dir("v3.sim.data", pattern = ".rms.", full.names = TRUE)
-
-for(f in fnames) {
+# create .rdata files that have only rmetasim gtypes data
+for(f in dir("v3.sim.data", pattern = ".rms.", full.names = TRUE)) {
   cat(f, "\n")
   load(f)
   sc <- attr(rms.list, "params")

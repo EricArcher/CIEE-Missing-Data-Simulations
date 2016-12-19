@@ -1,11 +1,10 @@
 rm(list = ls())
+library(swfscMisc)
 library(strataG)
 
-folder <- "v3.sim.data"
+folder <- "v4.sim.data"
 
-fnames <- dir(folder, pattern = ".rms.", full.names = TRUE)
-
-for(f in fnames) {
+for(f in dir(folder, pattern = ".rms.", full.names = TRUE)) {
   cat(f, "\n")
   load(f)
   sc <- attr(rms.list, "params")
@@ -14,7 +13,7 @@ for(f in fnames) {
 
   smry <- sapply(rms.list, function(g){
     c(
-      ne = median(ldNe(g)[, "Ne"]),
+      ne = harmonic.mean(ldNe(g)[, "Ne"]),
       fst = statFst(g)$result["estimate"],
       obsv.het = median(obsvdHet(g)),
       theta = median(theta(g)),

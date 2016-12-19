@@ -1,94 +1,12 @@
-# Simulated Data Summary, version 3
+# Simulated Data Summary, version 4
 12/12/2016
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(comment = "")
 ```
 
-The data was generated with a combination of a fastsimcoal simulation followed by an rmetasim simulation initialized with the allele frequencies derived from fastsimcoal. 
+The data was generated with a fastsimcoal simulation that created allele frequencies at equilibrium and were then used to initialize and run 5 generations of an rmetasim simulation.
 
 ## Scenario parameters
 
-The scenarios are defined as follows:
-
-```{r, echo=TRUE}
-load("v3.params.rdata")
-params[, 1:10]
-```
-
-These produce the following data.frame of scenario parameters:
-
-```{r, echo=FALSE}
-load("v1.scenarios.rdata")
-params$scenarios
-```
-
-For each scenario, two types of migration structures were simulated, "island" (for scenario 3):
-
-```{r, echo = FALSE}
-params$island[[3]]
-```
-
-and "stepping.stone":
-
-```{r, echo = FALSE}
-params$stepping.stone[[3]]
-```
-
-## Equilibirum tests
-
-To ensure that the selected divergence time was sufficiently long to establish mutation/migration/drift equilibrium, I ran 3 fastsimcoal replicates of each scenario at divergence times of 1, 5, 10, 50, 100, 500, 1000, 5000, and 10000 generations. Here is an example distribution of Fst and observed heterozygosity for Scenario 3 with the stepping.stone migration matrix:
-
-```{r, echo = FALSE}
-library(reshape2)
-library(ggplot2)
-f <- "equilibrium test/eq.test.smry.3.rdata"
-load(f)
-title <- paste("Scenario", i)
-colnames(eq.smry) <- c("time", "Fst", "Observed Heterozygosity")
-df <- melt(eq.smry, id.vars = "time")
-df$time <- factor(df$time)
-gpl <- ggplot(df, aes(time, value)) +
-  geom_point(alpha = 0.5) +
-  facet_grid(variable ~ ., scales = "free_y") +
-  ggtitle(title) + labs(x = "Divergence time")
-print(gpl)
-```
-
-All scenarios had clearly reached equilibrium for both measures by 10,000 generations except observed heterozygosity in scenario 4 (Ne = 500, Nm = 1, theta = 0.1). Thus, it may be worthwhile to increase divergence time to 50,000 or 100,000 just to be sure.
-
-## Fastsimcoal to rmetasim
-
-In order to establish linkage disequilibrium, a few generations of a forward-time simulator were required. rmetasim was parameterized with the same migration rate and population sizes as the fastsimcoal populations. Allele frequencies within populations were independently initialized using the observed allele frequencies from fastsimcoal. rmetasim was parameterized to ensure non-overlapping generations and equal reproductive success for males and females. The Poisson parameter for female and male reproduction was set to 1.2 to attempt to keep the reproductive output of each generation slightly greater than carrying capacity, which was set to Ne. If a population exceeds carrying capacity in any generation, the excess was randomly killed off. A total of 5 rmetasim generations were run to generate the final genotype data.
-
-## Simulated data
-
-The genotype data for each scenario are saved in a separate R workspace .rdata file named "v1.mig.gtypes.#.rdata", where "mig" is either "island" or "stepping.stone" and "#" is the scenario number. This file contains a single object, `sim.gtypes`, which is a list of 10 gtypes objects from the 10 fastsimcoal replicates based on the parameters of the given scenario. Each fastsimcoal replicate is followed only by a single rmetasim run leading to the present genotype data.
-
-Here is the summary of the first replicate for Scenario 3 with the stepping.stone migration model:
-
-```{r, include=FALSE}
-library(strataG)
-```
-```{r}
-load("v1.sim.data/v1.stepping.stone.gtypes.3.rdata")
-sim.gtypes[[1]]
-```
-
-The simulation parameters for a scenario are stored in the attributes of `sim.gtypes` named `params`:
-
-```{r}
-sc <- attr(sim.gtypes, "params")
-str(sc)
-```
-
-## Simulation diagnostics
-
-Below are the distributions of mean values of estimates of ldNe, Fst, observed heterozygosity, theta, and minimum allele frequency (MAF) for all scenarios separated by scenario parameter specifications of Nm (rows), theta (columns), and migration matrices (x-axis). Points are randomly jittered in each migration matrix, color-coded by scenario Ne:
-
-```{r, echo = FALSE}
-source("5 plot summaries.R")
-```
-
-
-
+The scenarios were designed with the following parameter combinations:
