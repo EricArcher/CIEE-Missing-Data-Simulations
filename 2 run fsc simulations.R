@@ -1,7 +1,7 @@
 rm(list = ls())
 library(strataG)
+load(rev(dir(pattern = ".params.rdata"))[1])
 
-load("v4.params.rdata")
 num.reps <- 10
 
 label <- attr(params, "label")

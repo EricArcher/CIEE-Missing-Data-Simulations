@@ -2,7 +2,7 @@ rm(list = ls())
 library(swfscMisc)
 library(strataG)
 
-folder <- "v4.sim.data"
+folder <- rev(dir(pattern = ".sim.data"))[1]
 
 for(f in dir(folder, pattern = ".rms.", full.names = TRUE)) {
   cat(f, "\n")
@@ -12,12 +12,13 @@ for(f in dir(folder, pattern = ".rms.", full.names = TRUE)) {
   if(file.exists(f)) next
 
   smry <- sapply(rms.list, function(g){
+    st.g <- strataSplit(g)
     c(
-      ne = harmonic.mean(ldNe(g)[, "Ne"]),
-      fst = statFst(g)$result["estimate"],
-      obsv.het = median(obsvdHet(g)),
-      theta = median(theta(g)),
-      maf = median(maf(g))
+      est.ne = harmonic.mean(ldNe(g)[, "Ne"]),
+      est.fst = statFst(g)$result["estimate"],
+      est.het = mean(unlist(lapply(st.g, obsvdHet))),
+      est.theta = mean(unlist(lapply(st.g, theta))),
+      est.maf = mean(unlist(lapply(st.g, maf)))
     )
   })
   attr(smry, "params") <- sc

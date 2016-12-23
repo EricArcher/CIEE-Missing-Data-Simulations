@@ -1,6 +1,5 @@
 rm(list = ls())
-
-source("v4.params.R")
+source("v5.params.R")
 
 # create scenario data.frame
 params <- expand.grid(
@@ -9,6 +8,8 @@ params <- expand.grid(
   num.pops = num.pops, div.time = div.time,
   stringsAsFactors = FALSE
 )
+params <- cbind(scenario = 1:nrow(params), params)
+params$mut.rate <- params$theta / (4 * params$Ne)
 params$mig.rate <- params$Nm / params$Ne
 params$mig.mat <- lapply(1:nrow(params), function(i) {
   num.pops <- params$num.pops[i]
@@ -33,9 +34,7 @@ params$mig.mat <- lapply(1:nrow(params), function(i) {
     }
   )
 })
-params$mut.rate <- params$theta / (4 * params$Ne)
-params$Fst <- 1 / ((4 * params$Nm) + 1)
-params <- cbind(scenario = 1:nrow(params), params)
+
 attr(params, "label") <- label
 
 save(params, file = paste0(label, ".params.rdata"))

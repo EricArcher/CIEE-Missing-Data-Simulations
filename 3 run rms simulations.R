@@ -3,7 +3,7 @@ library(rmetasim)
 library(strataG)
 source("rms funcs.R")
 
-load("v4.params.rdata")
+load("v5.params.rdata")
 num.gens <- 5
 
 label <- attr(params, "label")

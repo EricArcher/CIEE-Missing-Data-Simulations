@@ -3,9 +3,9 @@ library(reshape2)
 library(ggplot2)
 library(strataG)
 
-folder <- "v4.sim.data"
-
+folder <- rev(dir(pattern = ".sim.data"))[1]
 fnames <- dir(folder, pattern = ".smry.", full.names = TRUE)
+
 smry.df <- do.call(rbind, lapply(fnames, function(f) {
   load(f)
   sc <- attr(smry, "params")
