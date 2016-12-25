@@ -1,12 +1,74 @@
-# Simulated Data Summary, version 4
-12/12/2016
-
+---
+output:
+  md_document:
+    variant: markdown_github
+---
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(comment = "")
 ```
+# Simulated Data Summary, version 5
+```{r, echo=FALSE}
+cat(format(Sys.Date()))
+```
+
 
 The data was generated with a fastsimcoal simulation that created allele frequencies at equilibrium and were then used to initialize and run 5 generations of an rmetasim simulation.
 
 ## Scenario parameters
 
-The scenarios were designed with the following parameter combinations:
+The scenarios were composed of the following parameter combinations:
+
+```{r, echo=FALSE}
+load("v5.params.rdata")
+params[, 1:10]
+```
+
+The "island" model specifies a migration matrix such as the following from scenario 3, where the migration rate for a population is 0.02 split among the other 4 populations:
+
+```{r, echo=FALSE}
+params$mig.mat[3][[1]]
+```
+
+The "stepping.stone" model specifies a migration matrix such as the following from scenario 15, where the migration rate for a population is 0.02 split between the neighboring two populations:
+
+```{r, echo=FALSE}
+params$mig.mat[15][[1]]
+```
+
+## Simulated data diagnostics
+
+Below are diagnostic values from the final datasets generated from fastsimcoal and rmetasim. Ten replicates of the above scenarios were run through fastsimcoal, and the resulting allele frequencies were used to initialize a single run of rmetasim for 5 generations.
+
+Ne (est.Ne) is estimated with the `ldNe` function in strataG with a MAF cutoff of 0.05.
+Fst (est.Fst) is estimated with Weir and Cockerhams Fst from the `statFst` function in strataG.
+Theta (est.Theta) is estimated with theta based on heterozygosity from the `theta.h` function in pegas (called by the `theta` function in strataG).
+
+```{r, echo=FALSE}
+library(reshape2)
+library(ggplot2)
+library(strataG)
+
+folder <- rev(dir(pattern = ".sim.data"))[1]
+fnames <- dir(folder, pattern = ".smry.", full.names = TRUE)
+
+smry.df <- do.call(rbind, lapply(fnames, function(f) {
+  load(f)
+  sc <- attr(smry, "params")
+  sc$mig.mat <- NULL
+
+  df <- data.frame(t(smry))
+  colnames(df) <- c("est.Ne", "est.Fst", "obs.Het", "est.Theta", "MAF")
+  cbind(as.data.frame(sc), df)
+}))
+smry.df$Ne <- factor(smry.df$Ne)
+smry.df$Nm <- factor(smry.df$Nm)
+smry.df$theta <- factor(smry.df$theta)
+smry.df$mig.type <- factor(smry.df$mig.type)
+
+for(p in c("est.Ne", "est.Fst", "obs.Het", "est.Theta", "MAF")) {
+  g <- ggplot(smry.df, aes_string(x = "mig.type", y = p)) +
+    geom_jitter(aes(color = Ne), alpha = 0.7) +
+    facet_grid(Nm ~ theta, scales = "free_y", labeller = label_both)
+  print(g)
+}
+```
