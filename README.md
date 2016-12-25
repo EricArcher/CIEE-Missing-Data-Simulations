@@ -84,7 +84,11 @@ Simulated data diagnostics
 
 Below are diagnostic values from the final datasets generated from fastsimcoal and rmetasim. Ten replicates of the above scenarios were run through fastsimcoal, and the resulting allele frequencies were used to initialize a single run of rmetasim for 5 generations.
 
-Ne (est.Ne) is estimated with the `ldNe` function in strataG with a MAF cutoff of 0.05. Fst (est.Fst) is estimated with Weir and Cockerhams Fst from the `statFst` function in strataG. Theta (est.Theta) is estimated with theta based on heterozygosity from the `theta.h` function in pegas (called by the `theta` function in strataG).
+-   Ne (est.Ne) is estimated with the `ldNe` function in strataG with a MAF cutoff of 0.05.
+-   Fst (est.Fst) is estimated with Weir and Cockerhams Fst from the `statFst` function in strataG.
+-   Theta (est.Theta) is estimated with theta based on heterozygosity from the `theta.h` function in pegas (called by the `theta` function in strataG).
+
+<!-- -->
 
     Loading required package: apex
 
