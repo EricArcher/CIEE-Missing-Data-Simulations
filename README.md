@@ -1,7 +1,7 @@
 Simulated Data Summary, version 5
 =================================
 
-    2016-12-25
+    2016-12-29
 
 The data was generated with a fastsimcoal simulation that created allele frequencies at equilibrium and were then used to initialize and run 5 generations of an rmetasim simulation.
 
@@ -84,7 +84,7 @@ Simulated data diagnostics
 
 Below are diagnostic values from the final datasets generated from fastsimcoal and rmetasim. Ten replicates of the above scenarios were run through fastsimcoal, and the resulting allele frequencies were used to initialize a single run of rmetasim for 5 generations.
 
--   Ne (est.Ne) is estimated with the `ldNe` function in strataG with a MAF cutoff of 0.05.
+-   Ne (est.Ne) is the harmonic mean of estimated Ne calculated with the `ldNe` function in strataG with a MAF cutoff of 0.05.
 -   Fst (est.Fst) is estimated with Weir and Cockerhams Fst from the `statFst` function in strataG. The value shown is the Fst value from the global test of differentiation for all 5 populations.
 -   Observed Heterozygosity (obs.Het) is the mean value for all loci in all populations (n = 5000 loci).
 -   Theta (est.Theta) is estimated with theta based on heterozygosity from the `theta.h` function in pegas (called by the `theta` function in strataG). The value is mean value for all loci in all populations (n = 5000 loci).
