@@ -79,6 +79,15 @@ The "stepping.stone" model specifies a migration matrix such as the following fr
     [4,] 0.00 0.00 0.01 0.98 0.01
     [5,] 0.01 0.00 0.00 0.01 0.98
 
+Files
+-----
+
+All output files are contained in the folder "v\#.sim.data". The files are labelled as follows:
+
+-   v\#.fsc.\#\#.rdata - contains one object, `fsc.list`, which is a list containing one gtypes object for each fastsimcoal replicate for the scenario given in \#\# in the filename. `fsc.list` has an `params` attribute (`attr(fsc.list, "params")`) which is a one row data.frame with the parameters for the scenario that generated the replicates.
+-   v\#.rms.\#\#.rdata - contains two objects, `fsc.list` as above and `rms.list` which is a list of the results of the rmetasim runs on each of the fastsimcoal outputs from `fsc.list`. `attr(rms.list, "params")` contains a list of the parameters for the scenario rather than a one row data.frame
+-   v\#.smry.\#\#.rdata - contains one object, `smry`, which is a matrix containing summary diagnostics of Ne, Fst, observed heterozygosity, theta, and minimum allele frequency for each replicate as defined below.
+
 Simulated data diagnostics
 --------------------------
 
