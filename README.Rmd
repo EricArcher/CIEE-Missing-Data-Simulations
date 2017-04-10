@@ -43,10 +43,11 @@ All output files are contained in the folder "v#.sim.data". Each scenario has gt
 
 ## Diagnostics
 
-```{r, echo = FALSE}
+```{r, include=FALSE}
 library(tidyverse)
 load("v2.summaries.rdata")
-
+```
+```{r, echo = FALSE}
 pop.loc.df %>%
   filter(variable == "maf") %>%
   ggplot(aes(value)) +

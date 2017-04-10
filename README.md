@@ -74,18 +74,6 @@ All output files are contained in the folder "v\#.sim.data". Each scenario has g
 Diagnostics
 -----------
 
-    Loading tidyverse: ggplot2
-    Loading tidyverse: tibble
-    Loading tidyverse: tidyr
-    Loading tidyverse: readr
-    Loading tidyverse: purrr
-    Loading tidyverse: dplyr
-
-    Conflicts with tidy packages ----------------------------------------------
-
-    filter(): dplyr, stats
-    lag():    dplyr, stats
-
     `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-markdown_github/unnamed-chunk-5-1.png)![](README_files/figure-markdown_github/unnamed-chunk-5-2.png)![](README_files/figure-markdown_github/unnamed-chunk-5-3.png)
+![](README_files/figure-markdown_github/unnamed-chunk-6-1.png)![](README_files/figure-markdown_github/unnamed-chunk-6-2.png)![](README_files/figure-markdown_github/unnamed-chunk-6-3.png)
