@@ -1,5 +1,5 @@
 rm(list = ls())
-source("v5.params.R")
+source("v2.params.R")
 
 # create scenario data.frame
 params <- expand.grid(
@@ -17,19 +17,17 @@ params$mig.mat <- lapply(1:nrow(params), function(i) {
   switch(
     params$mig.type[i],
     island = {
-      per.pop.mig.rate <- mig.rate / (num.pops - 1)
-      mat <- matrix(rep(per.pop.mig.rate, num.pops ^ 2), nrow = num.pops)
-      diag(mat) <- 1 - mig.rate
+      mat <- matrix(rep(mig.rate, num.pops ^ 2), nrow = num.pops)
+      diag(mat) <- 1 - (mig.rate * (num.pops - 1))
       mat
     },
     stepping.stone = {
-      per.pop.mig.rate <- mig.rate / 2
       mat <- matrix(0, nrow = num.pops, ncol = num.pops)
       for(k in 1:(num.pops - 1)) {
-        mat[k, k + 1] <- mat[k + 1, k] <- per.pop.mig.rate
+        mat[k, k + 1] <- mat[k + 1, k] <- mig.rate
       }
-      mat[1, num.pops] <- mat[num.pops, 1] <- per.pop.mig.rate
-      diag(mat) <- 1 - mig.rate
+      mat[1, num.pops] <- mat[num.pops, 1] <- mig.rate
+      diag(mat) <- 1 - (mig.rate * 2)
       mat
     }
   )
