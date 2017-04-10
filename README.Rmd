@@ -40,3 +40,45 @@ All output files are contained in the folder "v#.sim.data". Each scenario has gt
 
 * `fsc.list` - A list of gtypes from fastsimcoal, one per replicate. The scenario parameters are stored as a one row data.frame in `attr(fsc.list, "params")`.
 * `rms.list` - A list of gtypes from rmetasim after initialization with the corresponding gtypes object from `fsc.list`. This contains the final genotypes. The scenario parameters are also stored as a one row data.frame in `attr(rms.list, "params")`. 
+
+## Diagnostics
+
+```{r, echo = FALSE}
+library(tidyverse)
+load("v2.summaries.rdata")
+
+pop.loc.df %>%
+  filter(variable == "maf") %>%
+  ggplot(aes(value)) +
+  geom_histogram() +
+  labs(x = "MAF", title = "MAF") +
+  facet_grid(Nm ~ mig.type, labeller = label_both)
+
+pop.struct.df %>%
+  filter(metric == "est.fst") %>%
+  mutate(ratio = log10(estimate / (1 / (4 * Nm + 1)))) %>%
+  ggplot(aes(factor(mig.type), ratio)) +
+  geom_hline(yintercept = 0, color = "red") +
+  geom_jitter(alpha = 0.6) +
+  labs(
+    x = "Migration Topology",
+    y = expression(log[10]("estimated Fst / expected Fst (=1/(4Nm + 1)")),
+    title = "Fst"
+  ) +
+  facet_wrap(~ Nm, ncol = 1, labeller = label_both)
+
+ne.df %>%
+  filter(variable == "Ne") %>%
+  mutate(ratio = log10(value / Ne)) %>%
+  ggplot(aes(factor(mig.type), ratio)) +
+  geom_hline(yintercept = 0, color = "red") +
+  geom_jitter(alpha = 0.6) +
+  labs(
+    x = "Migration Topology",
+    y = expression(log[10]("estimated Ne / simulation Ne")),
+    title = "ldNe"
+  ) +
+  facet_wrap(~ Nm, ncol = 1, labeller = label_both)
+
+```
+
