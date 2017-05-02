@@ -11,41 +11,41 @@ knitr::opts_chunk$set(comment = "")
 cat(format(Sys.Date()))
 ```
 
-The data was generated with a fastsimcoal simulation that created allele frequencies at equilibrium and were then used to initialize and run 3 generations of an rmetasim simulation.
+The data was generated with a fastsimcoal simulation that created allele frequencies at equilibrium and were then used to initialize and run 5 generations of an rmetasim simulation.
 
 ## Scenario parameters
 
 The scenarios were composed of the following parameter combinations:
 
 ```{r, echo=FALSE}
-load("v2.params.rdata")
-params[, 1:10]
+load("sim.results.20170502.0045.scenarios.rdata")
+sc.df[, 1:10]
 ```
 
-The "island" model specifies a migration matrix such as the following from scenario 3, where the migration rate for a population is `r params$mig.rate[3]` split among the other 4 populations:
+The "island" model specifies a migration matrix such as the following from scenario 3, where the migration rate for a population is `r sc.df$mig.rate[3]` split among the other 4 populations:
 
 ```{r, echo=FALSE}
-params$mig.mat[3][[1]]
+sc.df$mig.mat[3][[1]]
 ```
 
-The "stepping.stone" model specifies a migration matrix such as the following from scenario 15, where the migration rate for a population is `r params$mig.rate[15]` split between the neighboring two populations:
+The "stepping.stone" model specifies a migration matrix such as the following from scenario 15, where the migration rate for a population is `r sc.df$mig.rate[15]` split between the neighboring two populations:
 
 ```{r, echo=FALSE}
-params$mig.mat[15][[1]]
+sc.df$mig.mat[15][[1]]
 ```
 
 ## Files
 
-All output files are contained in the folder "v#.sim.data". Each scenario has gtypes objects stored in a R workspace file, named "v#.gtypes.sc.rdata" where "sc" is the scenario number. This file contains two objects:
+All output files are contained in the folder "<label>.sim.data", where "<label>" defaults to "sim.results.YYYMMDD.HHMM". Each scenario has gtypes objects stored in a R workspace file, named "gtypes.sc.rdata" where "sc" is the scenario number. This file contains two objects:
 
-* `fsc.list` - A list of gtypes from fastsimcoal, one per replicate. The scenario parameters are stored as a one row data.frame in `attr(fsc.list, "params")`.
-* `rms.list` - A list of gtypes from rmetasim after initialization with the corresponding gtypes object from `fsc.list`. This contains the final genotypes. The scenario parameters are also stored as a one row data.frame in `attr(rms.list, "params")`. 
+* `fsc.list` - A list of gtypes from fastsimcoal, one per replicate. The scenario parameters are stored as a one row data.frame in `attr(fsc.list, "scenario")`.
+* `rms.list` - A list of gtypes from rmetasim after initialization with the corresponding gtypes object from `fsc.list`. This contains the final genotypes. The scenario parameters are also stored as a one row data.frame in `attr(rms.list, "scenario")`. 
 
 ## Diagnostics
 
 ```{r, include=FALSE}
 library(tidyverse)
-load("v2.summaries.rdata")
+load("sim.results.20170502.0045.summaries.rdata")
 ```
 ```{r, echo = FALSE}
 pop.loc.df %>%
